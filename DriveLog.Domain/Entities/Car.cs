@@ -3,8 +3,11 @@ using DriveLog.ValueObjects;
 
 namespace DriveLog.Domain.Entities;
 
-public class Car(int number) : BaseEntity<Guid> {
-    public RacingNumber Number { get; private set; } = new(number);
+public class Car : BaseEntity<Guid> {
+    public Car(int number) => Number = new(number);
+    protected Car() { }
+
+    public RacingNumber Number { get; private set; } = null!;
 
     private readonly List<RaceLap> _raceLaps = [];
     public IReadOnlyCollection<RaceLap> RaceLaps => _raceLaps.AsReadOnly();

@@ -10,9 +10,6 @@ public class DriveLogDbContext(DbContextOptions options) : DbContext(options) {
     public DbSet<RaceLap> RaceLaps { get; set; }
     public DbSet<Track> Tracks { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
-        => optionsBuilder.EnableSensitiveDataLogging();
-
     protected override void OnModelCreating(ModelBuilder modelBuilder) 
         => modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
 }
