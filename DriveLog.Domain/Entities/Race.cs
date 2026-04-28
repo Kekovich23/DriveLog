@@ -2,9 +2,9 @@
 
 namespace DriveLog.Domain.Entities;
 
-public class Race(Track track, DateTime date) : BaseEntity<Guid> {
+public class Race(Track track, DateTimeOffset date) : BaseEntity<Guid> {
     public Guid TrackId { get; private set; } = track.Id;
-    public DateTime Date { get; private set; } = date;
+    public DateTimeOffset Date { get; private set; } = date;
     public Track Track { get; private set; } = track;
 
     private readonly List<RaceLap> _raceLaps = [];
