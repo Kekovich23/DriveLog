@@ -6,4 +6,5 @@
   <Project Path="DriveLog.Domain/DriveLog.Domain.csproj" />
   <Project Path="DriveLog.Infrastructure/DriveLog.Infrastructure.csproj" Id="75d312b0-2bba-4396-9b16-cabe9e17e6cb" />
   <Project Path="DriveLog.ValueObjects/DriveLog.ValueObjects.csproj" Id="4f21bc67-7c03-4809-a76b-e1249230ee3c" />
+  <Project Path="DriveLog.WebAPI/DriveLog.WebAPI.csproj" Id="499e4ad2-b5aa-48b2-9806-205a3bd37562" />
 </Solution>
