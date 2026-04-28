@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="DriveLog.Domain.App/DriveLog.Domain.App.csproj" Id="5b28879c-46ff-453a-8c57-758a8678c809" />
   <Project Path="DriveLog.Domain/DriveLog.Domain.csproj" />
   <Project Path="DriveLog.ValueObjects/DriveLog.ValueObjects.csproj" Id="4f21bc67-7c03-4809-a76b-e1249230ee3c" />
 </Solution>
