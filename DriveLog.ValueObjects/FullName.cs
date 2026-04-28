@@ -3,6 +3,7 @@
 namespace DriveLog.ValueObjects;
 
 public record FullName {
+    public const int MaxNameLength = 20;
     public string FirstName { get; init; }
     public string LastName { get; init; }
     public FullName(string firstName, string lastName) {
@@ -18,8 +19,8 @@ public record FullName {
             throw new StringIsNullOrEmptyException(paramName);
         }
 
-        if (value.Length > 20) {
-            throw new StringLengthExceedsLimit(20, paramName);
+        if (value.Length > MaxNameLength) {
+            throw new StringLengthExceedsLimit(MaxNameLength, paramName);
         }
     }
 
