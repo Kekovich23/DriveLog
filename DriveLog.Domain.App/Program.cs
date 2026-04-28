@@ -7,7 +7,7 @@ Console.WriteLine("Created car " + car.Number.Value);
 var track = new Track("Silverstone");
 Console.WriteLine("Created track " + track.Name.Value);
 
-var race = new Race(track, DateTime.UtcNow);
+var race = new Race(track, DateTimeOffset.UtcNow);
 Console.WriteLine($"Created race for track \"{race.Track.Name.Value}\" at {race.Date:d}");
 
 Console.WriteLine();
