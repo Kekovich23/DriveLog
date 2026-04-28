@@ -4,11 +4,8 @@ namespace DriveLog.Domain.Contracts.Repositories.Base;
 
 public interface IRepository<TEntity, in TId>
     where TEntity : BaseEntity<TId>
-    where TId : struct, IEquatable<TId> {
-    Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken, bool asNoTracking = false);
-    Task<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken);
-    Task<TEntity?> AddAsync(TEntity entity, CancellationToken cancellationToken);
-    Task<bool> UpdateAsync(TEntity entity, CancellationToken cancellationToken);
-    Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken);
-    Task<bool> DeleteAsync(TId id, CancellationToken cancellationToken);
+    where TId : notnull {
+    ValueTask<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken);
+    ValueTask<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken);
+    void Delete(TEntity entity);
 }
