@@ -3,4 +3,6 @@ using DriveLog.Domain.Entities;
 
 namespace DriveLog.Domain.Contracts.Repositories;
 
-public interface ITrackRepository : IRepository<Track, Guid>;
+public interface ITrackRepository : IRepository<Track, Guid> {
+    Task<Track?> GetByNameAsync(string name);
+}

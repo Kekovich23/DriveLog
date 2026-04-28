@@ -3,4 +3,6 @@ using DriveLog.Domain.Entities;
 
 namespace DriveLog.Domain.Contracts.Repositories;
 
-public interface ICarRepository : IRepository<Car, Guid>;
+public interface ICarRepository : IRepository<Car, Guid> {
+    Task<Car?> GetByNumberAsync(int number);
+}
