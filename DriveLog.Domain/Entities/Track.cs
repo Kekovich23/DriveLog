@@ -14,4 +14,12 @@ public class Track : BaseEntity<Guid> {
     public IReadOnlyCollection<Race> Races => _races.AsReadOnly();
 
     public void ChangeName(string name) => Name = new(name);
+
+    public Race CreateRace(DateTimeOffset date) {
+        var race = new Race(Id, date);
+
+        _races.Add(race);
+
+        return race;
+    }
 }

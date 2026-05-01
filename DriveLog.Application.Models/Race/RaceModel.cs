@@ -2,4 +2,4 @@
 
 namespace DriveLog.Application.Models.Race;
 
-public record RaceModel(Guid Id, Guid TrackId, DateTimeOffset Date) : IModel<Guid>;
+public record RaceModel(Guid Id, DateTimeOffset Date) : IModel<Guid>;
