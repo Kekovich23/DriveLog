@@ -3,15 +3,12 @@
 namespace DriveLog.Domain.Entities;
 
 public class RaceLap : BaseEntity<Guid> {
-    public RaceLap(Race race, Driver driver, Car car, int lapNumber, TimeSpan lapTime) {
-        RaceId = race.Id;
+    public RaceLap(Guid raceId, Guid driverId, Guid carId, int lapNumber, TimeSpan lapTime) {
+        RaceId = raceId;
         LapNumber = lapNumber;
         LapTime = lapTime;
-        DriverId = driver.Id;
-        CarId = car.Id;
-        Race = race;
-        Driver = driver;
-        Car = car;
+        DriverId = driverId;
+        CarId = carId;
     }
 
     protected RaceLap() { }
@@ -21,8 +18,13 @@ public class RaceLap : BaseEntity<Guid> {
     public TimeSpan LapTime { get; private set; }
     public Guid DriverId { get; private set; }
     public Guid CarId { get; private set; }
+    public Race? Race { get; private set; }
+    public Driver? Driver { get; private set; }
+    public Car? Car { get; private set; }
 
-    public Race Race { get; private set; } = null!;
-    public Driver Driver { get; private set; } = null!;
-    public Car Car { get; private set; } = null!;
+    public void ChangeRace(Guid raceId) => RaceId = raceId;
+    public void ChangeLapNumber(int lapNumber) => LapNumber = lapNumber;
+    public void ChangeLapTime(TimeSpan lapTime) => LapTime = lapTime;
+    public void ChangeDriver(Guid driverId) => DriverId = driverId;
+    public void ChangeCar(Guid carId) => CarId = carId;
 }
