@@ -2,6 +2,7 @@
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
   </Folder>
+  <Project Path="DriveLog.Application.Models/DriveLog.Application.Models.csproj" Id="528eaed9-f014-430b-b9d4-2deb26814ab1" />
   <Project Path="DriveLog.Domain.App/DriveLog.Domain.App.csproj" Id="5b28879c-46ff-453a-8c57-758a8678c809" />
   <Project Path="DriveLog.Domain/DriveLog.Domain.csproj" />
   <Project Path="DriveLog.Infrastructure/DriveLog.Infrastructure.csproj" Id="75d312b0-2bba-4396-9b16-cabe9e17e6cb" />
