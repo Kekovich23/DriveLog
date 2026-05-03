@@ -12,4 +12,6 @@ public record RacingNumber {
 
         Value = number;
     }
+
+    protected RacingNumber() { }
 }
