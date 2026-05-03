@@ -7,8 +7,7 @@ namespace DriveLog.Infrastructure.Configurations;
 
 public class CarConfiguration : IEntityTypeConfiguration<Car> {
     public void Configure(EntityTypeBuilder<Car> builder) {
-        builder.Property(x => x.Number)
-               .HasConversion(x => x.Value, x => new RacingNumber(x));
+        builder.ComplexProperty(x => x.Number);
 
         builder.ToTable("Cars", x => x.HasCheckConstraint("CK_Car_Number", $"\"{nameof(Car.Number)}\" > {RacingNumber.MinValue}"));
     }

@@ -12,8 +12,7 @@ public class DriverConfiguration : IEntityTypeConfiguration<Driver> {
             x.Property(x => x.LastName).HasMaxLength(FullName.MaxNameLength);
         });
 
-        builder.Property(x => x.Number)
-               .HasConversion(x => x.Value, x => new RacingNumber(x));
+        builder.ComplexProperty(x => x.Number);
 
         builder.ToTable("Drivers", x => x.HasCheckConstraint("CK_Driver_Number", $"\"{nameof(Driver.Number)}\" > {RacingNumber.MinValue}"));
     }
