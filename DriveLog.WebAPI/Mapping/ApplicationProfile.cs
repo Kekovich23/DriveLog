@@ -13,17 +13,17 @@ namespace DriveLog.WebAPI.Mapping;
 public class ApplicationProfile : Profile {
     public ApplicationProfile() {
         CreateMap<Car, CarModel>()
-            .ForMember(dest => dest.Number, opt => opt.MapFrom(src => src.Number.Value));
+            .ForCtorParam(nameof(CarModel.Number), opt => opt.MapFrom(src => src.Number.Value));
 
         CreateMap<Driver, DriverModel>()
-            .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FullName.FirstName))
-            .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.FullName.LastName))
-            .ForMember(dest => dest.Number, opt => opt.MapFrom(src => src.Number.Value));
+            .ForCtorParam(nameof(DriverModel.FirstName), opt => opt.MapFrom(src => src.FullName.FirstName))
+            .ForCtorParam(nameof(DriverModel.LastName), opt => opt.MapFrom(src => src.FullName.LastName))
+            .ForCtorParam(nameof(DriverModel.Number), opt => opt.MapFrom(src => src.Number.Value));
 
         CreateMap<Race, RaceModel>();
         CreateMap<RaceLap, RaceLapModel>();
         CreateMap<Track, TrackModel>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name.Value));
+            .ForCtorParam(nameof(TrackModel.Name), opt => opt.MapFrom(src => src.Name.Value));
 
         CreateMap<CarRequestModel, CarModel>();
         CreateMap<DriverRequestModel, DriverModel>();
