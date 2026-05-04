@@ -20,7 +20,7 @@ public static class ApplicationExtensions {
             }
         });
 
-        builder.Services.AddScoped<IUnitOfWork, DriveLogDbContext>();
+        builder.Services.AddScoped<IUnitOfWork>(opt => opt.GetRequiredService<DriveLogDbContext>());
 
         builder.Services.AddScoped<ICarRepository, CarRepository>();
         builder.Services.AddScoped<IDriverRepository, DriverRepository>();
