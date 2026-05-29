@@ -3,23 +3,15 @@ using DriveLog.ValueObjects;
 
 namespace DriveLog.Domain.Entities;
 
-public class Track : BaseEntity<Guid> {
-    public Track(string name) => Name = new(name);
+public class Track : AggregateEntity<Guid> {
+    public Track(Guid id, TrackName name) {
+        Id = id;
+        Name = name;
+    }
 
     protected Track() { }
 
-    public Name Name { get; private set; } = null!;
+    public TrackName Name { get; private set; } = null!;
 
-    private readonly List<Race> _races = [];
-    public IReadOnlyCollection<Race> Races => _races.AsReadOnly();
-
-    public void ChangeName(string name) => Name = new(name);
-
-    public Race CreateRace(DateTimeOffset date) {
-        var race = new Race(Id, date);
-
-        _races.Add(race);
-
-        return race;
-    }
+    public void ChangeName(TrackName name) => Name = name;
 }

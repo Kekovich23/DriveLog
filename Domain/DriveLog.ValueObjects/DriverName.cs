@@ -1,12 +1,10 @@
-﻿using DriveLog.ValueObjects.Exceptions;
+﻿namespace DriveLog.ValueObjects;
 
-namespace DriveLog.ValueObjects;
-
-public record FullName {
-    public const int MaxNameLength = 20;
+public record DriverName {
+    public const int MaxLength = 50;
     public string FirstName { get; init; }
     public string LastName { get; init; }
-    public FullName(string firstName, string lastName) {
+    public DriverName(string firstName, string lastName) {
         ValidateName(firstName, nameof(firstName));
         ValidateName(lastName, nameof(lastName));
 
@@ -16,11 +14,11 @@ public record FullName {
 
     private static void ValidateName(string value, string paramName) {
         if (string.IsNullOrWhiteSpace(value)) {
-            throw new StringIsNullOrEmptyException(paramName);
+            throw new ArgumentException("Name cannot be null or whitespace.", paramName);
         }
 
-        if (value.Length > MaxNameLength) {
-            throw new StringLengthExceedsLimit(MaxNameLength, paramName);
+        if (value.Length > MaxLength) {
+            throw new ArgumentException($"Name cannot exceed {MaxLength} characters.", paramName);
         }
     }
 
