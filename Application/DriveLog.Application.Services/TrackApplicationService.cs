@@ -12,9 +12,9 @@ public class TrackApplicationService(IUnitOfWork unitOfWork, ITrackRepository re
     : ApplicationService<Track, TrackModel, TrackCreateModel, Guid, ITrackRepository>(unitOfWork, repository, mapper), 
     ITrackApplicationService {
     protected override Task<Track?> CreateAsync(TrackCreateModel model, CancellationToken cancellationToken)
-        => Task.FromResult<Track?>(new Track(model.Name));
+        => Task.FromResult<Track?>(new Track(Guid.CreateVersion7(), new(model.Name)));
     protected override Task<bool> UpdateAsync(Track entity, TrackModel model, CancellationToken cancellationToken) {
-        entity.ChangeName(model.Name);
+        entity.ChangeName(new(model.Name));
 
         return Task.FromResult(true);
     }

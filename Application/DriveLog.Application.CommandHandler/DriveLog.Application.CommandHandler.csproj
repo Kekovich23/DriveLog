@@ -7,12 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="16.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Domain\DriveLog.Domain\DriveLog.Domain.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\DriveLog.Infrastructure\DriveLog.Infrastructure.csproj" />
     <ProjectReference Include="..\DriveLog.Application.Models\DriveLog.Application.Models.csproj" />
   </ItemGroup>
 

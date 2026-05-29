@@ -3,9 +3,9 @@
 namespace DriveLog.Domain.Contracts.Repositories.Base;
 
 public interface IRepository<TEntity, in TId>
-    where TEntity : BaseEntity<TId>
+    where TEntity : AggregateEntity<TId>
     where TId : notnull {
-    ValueTask<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken);
-    ValueTask<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken);
+    Task<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken);
+    void Add(TEntity entity);
     void Delete(TEntity entity);
 }

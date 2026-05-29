@@ -11,7 +11,7 @@ public abstract class ApplicationService<TEntity, TModel, TCreateModel, TId, TRe
                                                                                           TRepository repository,
                                                                                           IMapper mapper)
     : IApplicationService<TModel, TCreateModel, TId>
-    where TEntity : BaseEntity<TId>
+    where TEntity : AggregateEntity<TId>
     where TModel : class, IModel<TId>
     where TId : struct, IEquatable<TId>
     where TCreateModel : ICreateModel
@@ -26,7 +26,7 @@ public abstract class ApplicationService<TEntity, TModel, TCreateModel, TId, TRe
             return null;
         }
 
-        await _repository.AddAsync(entity, cancellationToken);
+        _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return _mapper.Map<TModel>(entity);
@@ -46,9 +46,6 @@ public abstract class ApplicationService<TEntity, TModel, TCreateModel, TId, TRe
 
     public async Task<TModel?> GetModelByIdAsync(TId id, CancellationToken cancellationToken = default)
         => _mapper.Map<TModel?>(await _repository.GetByIdAsync(id, cancellationToken));
-
-    public Task<IEnumerable<TModel>> GetModelsAsync(CancellationToken cancellationToken = default)
-        => throw new NotImplementedException();
 
     public async Task<bool> UpdateModelAsync(TModel model, CancellationToken cancellationToken = default) {
         var entity = await _repository.GetByIdAsync(model.Id, cancellationToken);

@@ -5,15 +5,14 @@ using Microsoft.EntityFrameworkCore;
 namespace DriveLog.Infrastructure.Repositories.Base;
 
 public abstract class Repository<TEntity, TId>(DriveLogDbContext dbContext) : IRepository<TEntity, TId>
-    where TEntity : BaseEntity<TId>
+    where TEntity : AggregateEntity<TId>
     where TId : notnull {
     protected readonly DbSet<TEntity> _dbSet = dbContext.Set<TEntity>();
 
-    public async ValueTask<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken)
-        => (await _dbSet.AddAsync(entity, cancellationToken)).Entity;
+    public async void Add(TEntity entity) => _dbSet.Add(entity);
 
     public void Delete(TEntity entity) => _dbSet.Remove(entity);
 
-    public ValueTask<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken)
-        => _dbSet.FindAsync([id], cancellationToken: cancellationToken);
+    public virtual Task<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken)
+        => _dbSet.FindAsync([id], cancellationToken: cancellationToken).AsTask();
 }
