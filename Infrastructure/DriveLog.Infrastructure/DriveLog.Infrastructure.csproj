@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DriveLog.Domain\DriveLog.Domain.csproj" />
+    <ProjectReference Include="..\..\Domain\DriveLog.Domain\DriveLog.Domain.csproj" />
   </ItemGroup>
 
 </Project>

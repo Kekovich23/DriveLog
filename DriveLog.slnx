@@ -1,13 +1,23 @@
 <Solution>
+  <Folder Name="/Application/">
+    <Project Path="Application/DriveLog.Application.Models/DriveLog.Application.Models.csproj" />
+    <Project Path="Application/DriveLog.Application.Services/DriveLog.Application.Services.csproj" />
+  </Folder>
+  <Folder Name="/Domain/">
+    <Project Path="Domain/DriveLog.Domain/DriveLog.Domain.csproj" />
+    <Project Path="Domain/DriveLog.ValueObjects/DriveLog.ValueObjects.csproj" />
+  </Folder>
+  <Folder Name="/DomainApp/">
+    <Project Path="DomainApp/DriveLog.Domain.App/DriveLog.Domain.App.csproj" />
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="Infrastructure/DriveLog.Infrastructure/DriveLog.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Presentation/">
+    <Project Path="Presentation/DriveLog.WebAPI.Models/DriveLog.WebAPI.Models.csproj" />
+    <Project Path="Presentation/DriveLog.WebAPI/DriveLog.WebAPI.csproj" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
   </Folder>
-  <Project Path="DriveLog.Application.Models/DriveLog.Application.Models.csproj" Id="528eaed9-f014-430b-b9d4-2deb26814ab1" />
-  <Project Path="DriveLog.Application.Services/DriveLog.Application.Services.csproj" Id="05115c9b-a023-4ae0-9c04-fd7f13352a68" />
-  <Project Path="DriveLog.Domain.App/DriveLog.Domain.App.csproj" Id="5b28879c-46ff-453a-8c57-758a8678c809" />
-  <Project Path="DriveLog.Domain/DriveLog.Domain.csproj" />
-  <Project Path="DriveLog.Infrastructure/DriveLog.Infrastructure.csproj" Id="75d312b0-2bba-4396-9b16-cabe9e17e6cb" />
-  <Project Path="DriveLog.ValueObjects/DriveLog.ValueObjects.csproj" Id="4f21bc67-7c03-4809-a76b-e1249230ee3c" />
-  <Project Path="DriveLog.WebAPI.Models/DriveLog.WebAPI.Models.csproj" Id="234a13ee-3bf8-4d39-9971-d8fe5898bf22" />
-  <Project Path="DriveLog.WebAPI/DriveLog.WebAPI.csproj" Id="499e4ad2-b5aa-48b2-9806-205a3bd37562" />
 </Solution>
