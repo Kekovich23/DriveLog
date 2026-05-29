@@ -1,4 +1,5 @@
-﻿using DriveLog.WebAPI.Extensions;
+﻿using DriveLog.WebAPI;
+using DriveLog.WebAPI.Extensions;
 
 DotNetEnv.Env.Load();
 
@@ -16,6 +17,8 @@ builder.Services.AddSwaggerGen(options => {
 });
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment()) {
     app.UseSwagger(options => options.RouteTemplate = "swagger/{documentName}/swagger.json");

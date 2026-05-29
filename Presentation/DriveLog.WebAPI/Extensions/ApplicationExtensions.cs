@@ -1,4 +1,5 @@
-﻿using DriveLog.Application.Services;
+﻿using DriveLog.Application.CommandHandler;
+using DriveLog.Application.Services;
 using DriveLog.Application.Services.Contracts;
 using DriveLog.Domain.Contracts;
 using DriveLog.Domain.Contracts.Repositories;
@@ -31,6 +32,11 @@ public static class ApplicationExtensions {
         builder.Services.AddScoped<IDriverApplicationService, DriverApplicationService>();
         builder.Services.AddScoped<ITrackApplicationService, TrackApplicationService>();
         builder.Services.AddScoped<IRaceQueryService, RaceQueryService>();
+
+        builder.Services.AddScoped<FinishRaceCommandHandler>();
+        builder.Services.AddScoped<RecordLapTimeCommandHandler>();
+        builder.Services.AddScoped<RegisterDriverCommandHandler>();
+        builder.Services.AddScoped<StartRaceCommandHandler>();
 
         builder.Services.AddAutoMapper(config => config.AddProfile<ApplicationProfile>());
     }
