@@ -36,7 +36,7 @@ public class Race : AggregateEntity<Guid> {
             throw new CarAlreadyRegisteredException(carId, Id);
         }
 
-        _entries.Add(new RaceEntry(Guid.CreateVersion7(), driverId, carId));
+        _entries.Add(new RaceEntry(Guid.CreateVersion7(), driverId, carId, Id));
     }
 
     public void StartRace(DateTimeOffset startTime) { 

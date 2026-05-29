@@ -1,4 +1,5 @@
 ﻿using DriveLog.Domain.Entities;
+using DriveLog.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -6,13 +7,19 @@ namespace DriveLog.Infrastructure.Configurations;
 
 public class RaceLapConfiguration : IEntityTypeConfiguration<RaceLap> {
     public void Configure(EntityTypeBuilder<RaceLap> builder) {
-        builder.HasOne(x => x.Car).WithMany(x => x.RaceLaps).OnDelete(DeleteBehavior.Restrict);
-        builder.Metadata.FindNavigation(nameof(Car.RaceLaps))?.SetPropertyAccessMode(PropertyAccessMode.Field);
+        builder.ToTable("race_laps", x => x.HasCheckConstraint("CK_lap_number_positive", "\"Id\" > 0"));
 
-        builder.HasOne(x => x.Driver).WithMany(x => x.RaceLaps).OnDelete(DeleteBehavior.Restrict);
-        builder.Metadata.FindNavigation(nameof(Driver.RaceLaps))?.SetPropertyAccessMode(PropertyAccessMode.Field);
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id)
+               .HasConversion(x => x.Value, x => new LapNumber(x))
+               .ValueGeneratedNever();
 
-        builder.HasOne(x => x.Race).WithMany(x => x.RaceLaps).OnDelete(DeleteBehavior.Cascade);
-        builder.Metadata.FindNavigation(nameof(Race.RaceLaps))?.SetPropertyAccessMode(PropertyAccessMode.Field);
+        builder.Property(x => x.Time)
+               .HasConversion(x => x.Duration, x => new LapTime(x))
+               .IsRequired();
+
+        builder.HasIndex(x => new { x.RaceEntryId, x.Id })
+               .IsUnique()
+               .HasDatabaseName("PK_race_entry_lap_number");
     }
 }
