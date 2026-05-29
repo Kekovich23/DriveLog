@@ -26,13 +26,11 @@ public static class ApplicationExtensions {
         builder.Services.AddScoped<IDriverRepository, DriverRepository>();
         builder.Services.AddScoped<IRaceRepository, RaceRepository>();
         builder.Services.AddScoped<ITrackRepository, TrackRepository>();
-        builder.Services.AddScoped<IRaceLapRepository, RaceLapRepository>();
 
         builder.Services.AddScoped<ICarApplicationService, CarApplicationService>();
         builder.Services.AddScoped<IDriverApplicationService, DriverApplicationService>();
-        builder.Services.AddScoped<IRaceApplicationService, RaceApplicationService>();
         builder.Services.AddScoped<ITrackApplicationService, TrackApplicationService>();
-        builder.Services.AddScoped<IRaceLapApplicationService, RaceLapApplicationService>();
+        builder.Services.AddScoped<IRaceQueryService, RaceQueryService>();
 
         builder.Services.AddAutoMapper(config => config.AddProfile<ApplicationProfile>());
     }

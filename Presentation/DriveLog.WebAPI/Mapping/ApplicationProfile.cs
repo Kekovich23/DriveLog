@@ -16,8 +16,8 @@ public class ApplicationProfile : Profile {
             .ForCtorParam(nameof(CarModel.Number), opt => opt.MapFrom(src => src.Number.Value));
 
         CreateMap<Driver, DriverModel>()
-            .ForCtorParam(nameof(DriverModel.FirstName), opt => opt.MapFrom(src => src.FullName.FirstName))
-            .ForCtorParam(nameof(DriverModel.LastName), opt => opt.MapFrom(src => src.FullName.LastName))
+            .ForCtorParam(nameof(DriverModel.FirstName), opt => opt.MapFrom(src => src.Name.FirstName))
+            .ForCtorParam(nameof(DriverModel.LastName), opt => opt.MapFrom(src => src.Name.LastName))
             .ForCtorParam(nameof(DriverModel.Number), opt => opt.MapFrom(src => src.Number.Value));
 
         CreateMap<Race, RaceModel>();

@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/Application/">
+    <Project Path="Application/DriveLog.Application.CommandHandler/DriveLog.Application.CommandHandler.csproj" Id="51bb299e-61cb-42d9-b3b9-755acc2bcaf5" />
     <Project Path="Application/DriveLog.Application.Models/DriveLog.Application.Models.csproj" />
     <Project Path="Application/DriveLog.Application.Services/DriveLog.Application.Services.csproj" />
   </Folder>

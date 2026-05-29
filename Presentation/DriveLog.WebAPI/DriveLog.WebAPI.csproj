@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Application\DriveLog.Application.CommandHandler\DriveLog.Application.CommandHandler.csproj" />
     <ProjectReference Include="..\..\Application\DriveLog.Application.Services\DriveLog.Application.Services.csproj" />
     <ProjectReference Include="..\..\Infrastructure\DriveLog.Infrastructure\DriveLog.Infrastructure.csproj" />
     <ProjectReference Include="..\DriveLog.WebAPI.Models\DriveLog.WebAPI.Models.csproj" />
