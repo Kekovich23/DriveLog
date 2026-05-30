@@ -11,31 +11,30 @@ public class RaceEntryConfiguration : IEntityTypeConfiguration<RaceEntry> {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedNever();
 
-        builder.Property(x => x.DriverId).IsRequired();
-        builder.Property(x => x.CarId).IsRequired();
-
-        builder.HasOne<Driver>()
+        builder.HasOne(x => x.Driver)
                .WithMany()
-               .HasForeignKey(x => x.DriverId)
+               .HasForeignKey("DriverId")
+               .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne<Car>()
+        builder.HasOne(x => x.Car)
                .WithMany()
-               .HasForeignKey(x => x.CarId)
+               .HasForeignKey("CarId")
+               .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasIndex(x => new {x.RaceId, x.DriverId})
+        builder.HasMany(x => x.Laps)
+               .WithOne(x => x.RaceEntry)
+               .HasForeignKey("RaceEntryId")
+               .IsRequired()
+               .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasIndex("RaceId", "DriverId")
                .IsUnique()
                .HasDatabaseName("IX_unique_race_driver");
 
-        builder.HasIndex(x => new {x.RaceId, x.CarId})
+        builder.HasIndex("RaceId", "CarId")
                .IsUnique()
                .HasDatabaseName("IX_unique_race_car");
-
-        builder.HasMany(x => x.Laps)
-               .WithOne()
-               .HasForeignKey(x => x.RaceEntryId)
-               .IsRequired()
-               .OnDelete(DeleteBehavior.Cascade);
     }
 }

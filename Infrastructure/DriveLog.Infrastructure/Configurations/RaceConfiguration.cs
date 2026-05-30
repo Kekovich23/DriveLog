@@ -12,20 +12,19 @@ public class RaceConfiguration : IEntityTypeConfiguration<Race> {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedNever();
 
-        builder.Property(x => x.TrackId).IsRequired();
-
-        builder.HasOne<Track>()
-               .WithMany()
-               .HasForeignKey(x => x.TrackId)
-               .OnDelete(DeleteBehavior.Restrict);
-
         builder.Property(x => x.Date)
                .HasConversion(x => x.Value, x => new RaceDate(x))
                .IsRequired();
 
+        builder.HasOne(x => x.Track)
+               .WithMany()
+               .HasForeignKey("TrackId")
+               .IsRequired()
+               .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasMany(x => x.Entries)
-               .WithOne()
-               .HasForeignKey(x => x.RaceId)
+               .WithOne(x => x.Race)
+               .HasForeignKey("RaceId")
                .IsRequired()
                .OnDelete(DeleteBehavior.Cascade);
     }

@@ -18,7 +18,7 @@ public class RaceLapConfiguration : IEntityTypeConfiguration<RaceLap> {
                .HasConversion(x => x.Duration, x => new LapTime(x))
                .IsRequired();
 
-        builder.HasIndex(x => new { x.RaceEntryId, x.Id })
+        builder.HasIndex("RaceEntryId", "Id")
                .IsUnique()
                .HasDatabaseName("PK_race_entry_lap_number");
     }
