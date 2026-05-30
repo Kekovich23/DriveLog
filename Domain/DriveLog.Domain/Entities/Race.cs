@@ -6,15 +6,15 @@ using DriveLog.ValueObjects.Exceptions;
 namespace DriveLog.Domain.Entities;
 
 public class Race : AggregateEntity<Guid> {
-    public Race(Guid id, Guid trackId, RaceDate date) {
+    public Race(Guid id, Track track, RaceDate date) {
         Id = id;
-        TrackId = trackId;
+        Track = track;
         Date = date;
     }
 
     protected Race() { }
 
-    public Guid TrackId { get; private set; }
+    public Track Track { get; private set; } = null!;
     public RaceStatus Status { get; private set; } = RaceStatus.Created;
     public DateTimeOffset? ActualStartTime { get; private set; }
     public DateTimeOffset? ActualEndTime { get; private set; }
@@ -23,20 +23,20 @@ public class Race : AggregateEntity<Guid> {
     private readonly List<RaceEntry> _entries = [];
     public IReadOnlyCollection<RaceEntry> Entries => _entries.AsReadOnly();
 
-    public void RegisterDriver(Guid driverId, Guid carId) {
+    public void RegisterDriver(Driver driver, Car car) {
         if (Status != RaceStatus.Created) {
             throw new InvalidOperationException("Cannot register driver for a race that is not in created status.");
         }
 
-        if (_entries.Any(x => x.DriverId == driverId)) {
-            throw new DriverAlreadyRegisteredException(driverId, Id);
+        if (_entries.Any(x => x.Driver.Id == driver.Id)) {
+            throw new DriverAlreadyRegisteredException(driver.Id, Id);
         }
 
-        if (_entries.Any(x => x.CarId == carId)) {
-            throw new CarAlreadyRegisteredException(carId, Id);
+        if (_entries.Any(x => x.Car.Id == car.Id)) {
+            throw new CarAlreadyRegisteredException(car.Id, Id);
         }
 
-        _entries.Add(new RaceEntry(Guid.CreateVersion7(), driverId, carId, Id));
+        _entries.Add(new RaceEntry(Guid.CreateVersion7(), driver, car, this));
     }
 
     public void StartRace(DateTimeOffset startTime) { 
@@ -61,15 +61,12 @@ public class Race : AggregateEntity<Guid> {
         ActualEndTime = endTime;
     }
 
-    public void RecordLapTime(Guid driverId, LapTime time) {
+    public void RecordLapTime(Driver driver, LapTime time) {
         if (Status != RaceStatus.InProgress) {
             throw new InvalidOperationException("Cannot record lap time for a race that is not in progress.");
         }
 
-        var entry = _entries.FirstOrDefault(x => x.DriverId == driverId);
-        if (entry == null) {
-            throw new DriverNotRegisteredException(driverId, Id);
-        }
+        var entry = _entries.FirstOrDefault(x => x.Driver.Id == driver.Id) ?? throw new DriverNotRegisteredException(driver.Id, Id);
 
         entry.AddLap(time);
     }

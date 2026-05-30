@@ -4,20 +4,20 @@ using DriveLog.ValueObjects;
 namespace DriveLog.Domain.Entities;
 
 public class RaceEntry : BaseEntity<Guid> {
-    public RaceEntry(Guid id, Guid driverId, Guid carId, Guid raceId) {
+    public RaceEntry(Guid id, Driver driver, Car car, Race race) {
         Id = id;
-        DriverId = driverId;
-        CarId = carId;
-        RaceId = raceId;
+        Driver = driver;
+        Car = car;
+        Race = race;
     }
 
     protected RaceEntry() { }
 
-    public Guid DriverId { get; private set; }
-    public Guid CarId { get; private set; }
-    public Guid RaceId { get; private set; }
+    public Driver Driver { get; private set; } = null!;
+    public Car Car { get; private set; } = null!;
+    public Race Race { get; private set; } = null!;
     private readonly List<RaceLap> _laps = [];
     public IReadOnlyCollection<RaceLap> Laps => _laps.AsReadOnly();
 
-    public void AddLap(LapTime time) => _laps.Add(new RaceLap(new(_laps.Count + 1), Id, time));
+    public void AddLap(LapTime time) => _laps.Add(new RaceLap(new(_laps.Count + 1), this, time));
 }
