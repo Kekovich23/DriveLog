@@ -9,7 +9,7 @@ public abstract class Repository<TEntity, TId>(DriveLogDbContext dbContext) : IR
     where TId : notnull {
     protected readonly DbSet<TEntity> _dbSet = dbContext.Set<TEntity>();
 
-    public async void Add(TEntity entity) => _dbSet.Add(entity);
+    public void Add(TEntity entity) => _dbSet.Add(entity);
 
     public void Delete(TEntity entity) => _dbSet.Remove(entity);
 
