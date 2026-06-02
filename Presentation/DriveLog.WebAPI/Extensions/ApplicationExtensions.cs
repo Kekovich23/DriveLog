@@ -37,6 +37,7 @@ public static class ApplicationExtensions {
         builder.Services.AddScoped<RecordLapTimeCommandHandler>();
         builder.Services.AddScoped<RegisterDriverCommandHandler>();
         builder.Services.AddScoped<StartRaceCommandHandler>();
+        builder.Services.AddScoped<CreateRaceCommandHandler>();
 
         builder.Services.AddAutoMapper(config => config.AddProfile<ApplicationProfile>());
     }

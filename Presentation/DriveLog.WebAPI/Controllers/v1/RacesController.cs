@@ -8,11 +8,19 @@ namespace DriveLog.WebAPI.Controllers.v1;
 
 [ApiController]
 [Route("api/v1/[controller]")]
-public class RacesController(RegisterDriverCommandHandler registerHandler,
+public class RacesController(CreateRaceCommandHandler createHandler,
+                             RegisterDriverCommandHandler registerHandler,
                              StartRaceCommandHandler startHandler,
                              RecordLapTimeCommandHandler recordLapHandler,
                              FinishRaceCommandHandler finishHandler,
                              IRaceQueryService queryService) : ControllerBase {
+    [HttpPost]
+    public async Task<IActionResult> CreateAsync([FromBody] RaceRequestModel model, CancellationToken cancellationToken) {
+        var race = await createHandler.HandleAsync(new CreateRaceCommand(model.TrackId, model.Date), cancellationToken);
+
+        return CreatedAtRoute("GetRaceById", new { id = race.Id }, race);
+    }
+
     [HttpPost("{id}/drivers")]
     public async Task<IActionResult> RegisterDriverAsync(Guid id, [FromBody] RegisterDriverRequestModel model, CancellationToken cancellationToken) {
         await registerHandler.HandleAsync(new RegisterDriverCommand(id, model.DriverId, model.CarId), cancellationToken);

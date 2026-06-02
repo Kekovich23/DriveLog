@@ -8,7 +8,12 @@ public record RaceResponseModel {
     /// Unique identifier for the race.
     /// </summary>
     public Guid Id { get; init; }
-    
+
+    /// <summary>
+    /// Track ID for the race.
+    /// </summary>
+    public Guid TrackId { get; init; }
+
     /// <summary>
     /// Date and time when the race was held.
     /// </summary>
