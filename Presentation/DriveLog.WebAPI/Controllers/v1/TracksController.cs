@@ -10,6 +10,10 @@ namespace DriveLog.WebAPI.Controllers.v1;
 [ApiController]
 [Route("api/v1/[controller]")]
 public class TracksController(IMapper mapper, ITrackApplicationService trackService) : ControllerBase {
+    [HttpGet]
+    public async Task<IActionResult> GetAllAsync(CancellationToken cancellationToken)
+        => Ok(mapper.Map<List<TrackResponseModel>>(await trackService.GetAllModelsAsync(cancellationToken)));
+
     [HttpGet("{id}", Name = Constants.GetTrackById)]
     public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken) {
         var model = await trackService.GetModelByIdAsync(id, cancellationToken);

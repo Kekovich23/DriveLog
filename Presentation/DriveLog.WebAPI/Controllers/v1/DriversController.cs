@@ -10,7 +10,11 @@ namespace DriveLog.WebAPI.Controllers.v1;
 [ApiController]
 [Route("api/v1/[controller]")]
 public class DriversController(IMapper mapper, IDriverApplicationService driverService) : ControllerBase {
-    [HttpGet("{id}", Name =Constants.GetDriverById)]
+    [HttpGet]
+    public async Task<IActionResult> GetAllAsync(CancellationToken cancellationToken)
+        => Ok(mapper.Map<List<DriverResponseModel>>(await driverService.GetAllModelsAsync(cancellationToken)));
+
+    [HttpGet("{id}", Name = Constants.GetDriverById)]
     public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken) {
         var model = await driverService.GetModelByIdAsync(id, cancellationToken);
 

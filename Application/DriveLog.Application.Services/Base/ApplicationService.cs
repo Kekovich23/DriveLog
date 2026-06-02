@@ -47,6 +47,9 @@ public abstract class ApplicationService<TEntity, TModel, TCreateModel, TId, TRe
     public async Task<TModel?> GetModelByIdAsync(TId id, CancellationToken cancellationToken = default)
         => _mapper.Map<TModel?>(await _repository.GetByIdAsync(id, cancellationToken));
 
+    public async Task<IReadOnlyList<TModel>> GetAllModelsAsync(CancellationToken cancellationToken = default)
+        => _mapper.Map<List<TModel>>(await _repository.GetAllAsync(cancellationToken));
+
     public async Task<bool> UpdateModelAsync(TModel model, CancellationToken cancellationToken = default) {
         var entity = await _repository.GetByIdAsync(model.Id, cancellationToken);
 

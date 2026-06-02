@@ -6,6 +6,7 @@ public interface IRepository<TEntity, in TId>
     where TEntity : AggregateEntity<TId>
     where TId : notnull {
     Task<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken);
+    Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken);
     void Add(TEntity entity);
     void Delete(TEntity entity);
 }

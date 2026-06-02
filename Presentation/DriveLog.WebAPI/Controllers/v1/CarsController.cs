@@ -10,6 +10,10 @@ namespace DriveLog.WebAPI.Controllers.v1;
 [ApiController]
 [Route("api/v1/[controller]")]
 public class CarsController(IMapper mapper, ICarApplicationService carService) : ControllerBase {
+    [HttpGet]
+    public async Task<IActionResult> GetAllAsync(CancellationToken cancellationToken)
+        => Ok(mapper.Map<List<CarResponseModel>>(await carService.GetAllModelsAsync(cancellationToken)));
+
     [HttpGet("{id}", Name = Constants.GetCarById)]
     public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken) {
         var model = await carService.GetModelByIdAsync(id, cancellationToken);
