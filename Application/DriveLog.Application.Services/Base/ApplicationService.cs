@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DriveLog.Application.Models.Base;
+using DriveLog.Application.Models.Pagination;
 using DriveLog.Application.Services.Contracts.Base;
 using DriveLog.Domain.Contracts;
 using DriveLog.Domain.Contracts.Repositories.Base;
@@ -47,8 +48,11 @@ public abstract class ApplicationService<TEntity, TModel, TCreateModel, TId, TRe
     public async Task<TModel?> GetModelByIdAsync(TId id, CancellationToken cancellationToken = default)
         => _mapper.Map<TModel?>(await _repository.GetByIdAsync(id, cancellationToken));
 
-    public async Task<IReadOnlyList<TModel>> GetAllModelsAsync(CancellationToken cancellationToken = default)
-        => _mapper.Map<List<TModel>>(await _repository.GetAllAsync(cancellationToken));
+    public async Task<PaginatedResponse<TModel>> GetAllModelsAsync(int skip, int take, CancellationToken cancellationToken = default) {
+        var (items, total) = await _repository.GetAllAsync(skip, take, cancellationToken);
+
+        return new PaginatedResponse<TModel>(_mapper.Map<List<TModel>>(items), total);
+    }
 
     public async Task<bool> UpdateModelAsync(TModel model, CancellationToken cancellationToken = default) {
         var entity = await _repository.GetByIdAsync(model.Id, cancellationToken);

@@ -1,5 +1,6 @@
 ﻿using DriveLog.Application.CommandHandler;
 using DriveLog.Application.Models;
+using DriveLog.Application.Models.Pagination;
 using DriveLog.Application.Services.Contracts;
 using DriveLog.WebAPI.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
@@ -15,8 +16,12 @@ public class RacesController(CreateRaceCommandHandler createHandler,
                              FinishRaceCommandHandler finishHandler,
                              IRaceQueryService queryService) : ControllerBase {
     [HttpGet]
-    public async Task<IActionResult> GetAllAsync(CancellationToken cancellationToken)
-        => Ok(await queryService.GetAllRacesAsync(cancellationToken));
+    public async Task<IActionResult> GetAllAsync([FromQuery] int skip = 0, [FromQuery] int take = 10, CancellationToken cancellationToken = default) {
+        var pagination = new PaginationRequest { Skip = skip, Take = take }.Validate();
+        var result = await queryService.GetAllRacesAsync(pagination.Skip, pagination.Take, cancellationToken);
+
+        return Ok(new PaginatedResponse<RaceResponseModel>(mapper.Map<List<RaceResponseModel>>(result.Data), result.Total));
+    }
 
     [HttpGet("{id}", Name = "GetRaceById")]
     public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken) {

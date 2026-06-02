@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DriveLog.Application.Models.Pagination;
 using DriveLog.Application.Models.Track;
 using DriveLog.Application.Services.Contracts;
 using DriveLog.WebAPI.Models.Requests;
@@ -11,8 +12,12 @@ namespace DriveLog.WebAPI.Controllers.v1;
 [Route("api/v1/[controller]")]
 public class TracksController(IMapper mapper, ITrackApplicationService trackService) : ControllerBase {
     [HttpGet]
-    public async Task<IActionResult> GetAllAsync(CancellationToken cancellationToken)
-        => Ok(mapper.Map<List<TrackResponseModel>>(await trackService.GetAllModelsAsync(cancellationToken)));
+    public async Task<IActionResult> GetAllAsync([FromQuery] int skip = 0, [FromQuery] int take = 10, CancellationToken cancellationToken = default) {
+        var pagination = new PaginationRequest { Skip = skip, Take = take }.Validate();
+        var result = await trackService.GetAllModelsAsync(pagination.Skip, pagination.Take, cancellationToken);
+
+        return Ok(new PaginatedResponse<TrackResponseModel>(mapper.Map<List<TrackResponseModel>>(result.Data), result.Total));
+    }
 
     [HttpGet("{id}", Name = Constants.GetTrackById)]
     public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken) {

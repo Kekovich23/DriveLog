@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DriveLog.Application.Models.Car;
+using DriveLog.Application.Models.Pagination;
 using DriveLog.Application.Services.Contracts;
 using DriveLog.WebAPI.Models.Requests;
 using DriveLog.WebAPI.Models.Responses;
@@ -11,8 +12,12 @@ namespace DriveLog.WebAPI.Controllers.v1;
 [Route("api/v1/[controller]")]
 public class CarsController(IMapper mapper, ICarApplicationService carService) : ControllerBase {
     [HttpGet]
-    public async Task<IActionResult> GetAllAsync(CancellationToken cancellationToken)
-        => Ok(mapper.Map<List<CarResponseModel>>(await carService.GetAllModelsAsync(cancellationToken)));
+    public async Task<IActionResult> GetAllAsync([FromQuery] int skip = 0, [FromQuery] int take = 10, CancellationToken cancellationToken = default) {
+        var pagination = new PaginationRequest { Skip = skip, Take = take }.Validate();
+        var result = await carService.GetAllModelsAsync(pagination.Skip, pagination.Take, cancellationToken);
+
+        return Ok(new PaginatedResponse<CarResponseModel>(mapper.Map<List<CarResponseModel>>(result.Data), result.Total));
+    }
 
     [HttpGet("{id}", Name = Constants.GetCarById)]
     public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken) {

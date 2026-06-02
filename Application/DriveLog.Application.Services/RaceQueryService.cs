@@ -1,4 +1,5 @@
 ﻿using DriveLog.Application.Models;
+using DriveLog.Application.Models.Pagination;
 using DriveLog.Application.Models.Race;
 using DriveLog.Application.Services.Contracts;
 using DriveLog.Infrastructure;
@@ -14,10 +15,13 @@ public class RaceQueryService(DriveLogDbContext context) : IRaceQueryService {
         return race == null ? null : new RaceModel(race.Id, race.TrackId, race.Date.Value);
     }
 
-    public async Task<IReadOnlyList<RaceModel>> GetAllRacesAsync(CancellationToken cancellationToken = default)
-        => (await context.Races.AsNoTracking()
+    public async Task<PaginatedResponse<RaceModel>> GetAllRacesAsync(int skip, int take, CancellationToken cancellationToken = default)
+        => new(await context.Races.AsNoTracking()
+                                  .Skip(skip)
+                                  .Take(take)
                                .Select(r => new RaceModel(r.Id, r.TrackId, r.Date.Value))
-                               .ToListAsync(cancellationToken)).AsReadOnly();
+                                  .ToListAsync(cancellationToken),
+               await context.Races.CountAsync(cancellationToken));
 
     public async Task<BestTimeDto?> GetBestLapTimeAsync(Guid raceId, CancellationToken cancellationToken = default) {
         var bestLapData = await context.Races.AsNoTracking()

@@ -16,6 +16,7 @@ public abstract class Repository<TEntity, TId>(DriveLogDbContext dbContext) : IR
     public virtual Task<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken)
         => _dbSet.FindAsync([id], cancellationToken: cancellationToken).AsTask();
 
-    public virtual async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken) 
-        => (await _dbSet.ToListAsync(cancellationToken)).AsReadOnly();
+    public virtual async Task<(IReadOnlyList<TEntity> Items, int Total)> GetAllAsync(int skip, int take, CancellationToken cancellationToken) 
+        => ((await _dbSet.Skip(skip).Take(take).ToListAsync(cancellationToken)).AsReadOnly(),
+            await _dbSet.CountAsync(cancellationToken));
 }
