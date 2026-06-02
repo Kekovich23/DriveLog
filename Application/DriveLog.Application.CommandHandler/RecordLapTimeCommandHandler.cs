@@ -6,15 +6,12 @@ using DriveLog.ValueObjects.Exceptions;
 
 namespace DriveLog.Application.CommandHandler;
 
-public class RecordLapTimeCommandHandler(IRaceRepository raceRepository, IDriverRepository driverRepository, IUnitOfWork unitOfWork) : ICommandHandler<RecordLapTimeCommand> {
+public class RecordLapTimeCommandHandler(IRaceRepository raceRepository, IUnitOfWork unitOfWork) : ICommandHandler<RecordLapTimeCommand> {
     public async Task HandleAsync(RecordLapTimeCommand command, CancellationToken cancellationToken = default) {
         var race = await raceRepository.GetByIdAsync(command.RaceId, cancellationToken)
             ?? throw new EntityNotFoundException("Race not found.");
 
-        var driver = await driverRepository.GetByIdAsync(command.DriverId, cancellationToken)
-            ?? throw new EntityNotFoundException("Driver not found.");
-
-        race.RecordLapTime(driver, new(command.Duration));
+        race.RecordLapTime(command.DriverId, new(command.Duration));
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
     }

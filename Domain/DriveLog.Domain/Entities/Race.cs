@@ -6,15 +6,14 @@ using DriveLog.ValueObjects.Exceptions;
 namespace DriveLog.Domain.Entities;
 
 public class Race : AggregateEntity<Guid> {
-    public Race(Guid id, Track track, RaceDate date) {
-        Id = id;
-        Track = track;
+    public Race(Guid id, Guid trackId, RaceDate date) : base(id) {
+        TrackId = trackId;
         Date = date;
     }
 
     protected Race() { }
 
-    public Track Track { get; private set; } = null!;
+    public Guid TrackId { get; private set; }
     public RaceStatus Status { get; private set; } = RaceStatus.Created;
     public DateTimeOffset? ActualStartTime { get; private set; }
     public DateTimeOffset? ActualEndTime { get; private set; }
@@ -23,23 +22,23 @@ public class Race : AggregateEntity<Guid> {
     private readonly List<RaceEntry> _entries = [];
     public IReadOnlyCollection<RaceEntry> Entries => _entries.AsReadOnly();
 
-    public void RegisterDriver(Driver driver, Car car) {
+    public void RegisterDriver(Guid driverId, Guid carId) {
         if (Status != RaceStatus.Created) {
             throw new InvalidOperationException("Cannot register driver for a race that is not in created status.");
         }
 
-        if (_entries.Any(x => x.Driver.Id == driver.Id)) {
-            throw new DriverAlreadyRegisteredException(driver.Id, Id);
+        if (_entries.Any(x => x.DriverId == driverId)) {
+            throw new DriverAlreadyRegisteredException(driverId, Id);
         }
 
-        if (_entries.Any(x => x.Car.Id == car.Id)) {
-            throw new CarAlreadyRegisteredException(car.Id, Id);
+        if (_entries.Any(x => x.CarId == carId)) {
+            throw new CarAlreadyRegisteredException(carId, Id);
         }
 
-        _entries.Add(new RaceEntry(Guid.CreateVersion7(), driver, car, this));
+        _entries.Add(new RaceEntry(Guid.CreateVersion7(), driverId, carId));
     }
 
-    public void StartRace(DateTimeOffset startTime) { 
+    public void StartRace(DateTimeOffset startTime) {
         if (Status != RaceStatus.Created) {
             throw new InvalidOperationException("Cannot start a race that is not in created status.");
         }
@@ -61,12 +60,12 @@ public class Race : AggregateEntity<Guid> {
         ActualEndTime = endTime;
     }
 
-    public void RecordLapTime(Driver driver, LapTime time) {
+    public void RecordLapTime(Guid driverId, LapTime time) {
         if (Status != RaceStatus.InProgress) {
             throw new InvalidOperationException("Cannot record lap time for a race that is not in progress.");
         }
 
-        var entry = _entries.FirstOrDefault(x => x.Driver.Id == driver.Id) ?? throw new DriverNotRegisteredException(driver.Id, Id);
+        var entry = _entries.FirstOrDefault(x => x.DriverId == driverId) ?? throw new DriverNotRegisteredException(driverId, Id);
 
         entry.AddLap(time);
     }

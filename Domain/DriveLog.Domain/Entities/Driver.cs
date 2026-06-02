@@ -4,8 +4,7 @@ using DriveLog.ValueObjects;
 namespace DriveLog.Domain.Entities;
 
 public class Driver : AggregateEntity<Guid> {
-    public Driver(Guid id, DriverName name, DriverNumber number) {
-        Id = id;
+    public Driver(Guid id, DriverName name, DriverNumber number) : base(id) {
         Name = name;
         Number = number;
     }

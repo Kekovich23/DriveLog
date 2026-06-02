@@ -4,10 +4,7 @@ using DriveLog.ValueObjects;
 namespace DriveLog.Domain.Entities;
 
 public class Car : AggregateEntity<Guid> {
-    public Car(Guid id, CarNumber number) {
-        Id = id;
-        Number = number;
-    }
+    public Car(Guid id, CarNumber number) : base(id) => Number = number;
 
     protected Car() { }
 

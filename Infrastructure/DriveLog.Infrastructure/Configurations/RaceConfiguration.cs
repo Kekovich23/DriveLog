@@ -16,14 +16,14 @@ public class RaceConfiguration : IEntityTypeConfiguration<Race> {
                .HasConversion(x => x.Value, x => new RaceDate(x))
                .IsRequired();
 
-        builder.HasOne(x => x.Track)
+        builder.HasOne<Track>()
                .WithMany()
-               .HasForeignKey("TrackId")
+               .HasForeignKey(x => x.TrackId)
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(x => x.Entries)
-               .WithOne(x => x.Race)
+               .WithOne()
                .HasForeignKey("RaceId")
                .IsRequired()
                .OnDelete(DeleteBehavior.Cascade);

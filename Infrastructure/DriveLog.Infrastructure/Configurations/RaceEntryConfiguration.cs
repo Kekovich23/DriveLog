@@ -11,20 +11,20 @@ public class RaceEntryConfiguration : IEntityTypeConfiguration<RaceEntry> {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedNever();
 
-        builder.HasOne(x => x.Driver)
+        builder.HasOne<Driver>()
                .WithMany()
-               .HasForeignKey("DriverId")
+               .HasForeignKey(x => x.DriverId)
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(x => x.Car)
+        builder.HasOne<Car>()
                .WithMany()
-               .HasForeignKey("CarId")
+               .HasForeignKey(x => x.CarId)
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(x => x.Laps)
-               .WithOne(x => x.RaceEntry)
+               .WithOne()
                .HasForeignKey("RaceEntryId")
                .IsRequired()
                .OnDelete(DeleteBehavior.Cascade);

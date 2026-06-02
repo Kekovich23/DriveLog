@@ -10,7 +10,7 @@ namespace DriveLog.WebAPI.Controllers.v1;
 [ApiController]
 [Route("api/v1/[controller]")]
 public class TracksController(IMapper mapper, ITrackApplicationService trackService) : ControllerBase {
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name = Constants.GetTrackById)]
     public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken) {
         var model = await trackService.GetModelByIdAsync(id, cancellationToken);
 
@@ -21,7 +21,7 @@ public class TracksController(IMapper mapper, ITrackApplicationService trackServ
     public async Task<IActionResult> CreateAsync([FromBody] TrackRequestModel model, CancellationToken cancellationToken) {
         var createdModel = await trackService.CreateModelAsync(mapper.Map<TrackCreateModel>(model), cancellationToken);
 
-        return createdModel is not null ? CreatedAtAction(nameof(GetByIdAsync), new { id = createdModel.Id }, mapper.Map<TrackResponseModel>(createdModel)) : BadRequest();
+        return createdModel is not null ? CreatedAtRoute(Constants.GetTrackById, new { id = createdModel.Id }, mapper.Map<TrackResponseModel>(createdModel)) : BadRequest();
     }
 
     [HttpPut("{id}")]

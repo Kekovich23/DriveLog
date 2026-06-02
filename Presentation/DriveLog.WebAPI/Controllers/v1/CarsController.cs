@@ -10,7 +10,7 @@ namespace DriveLog.WebAPI.Controllers.v1;
 [ApiController]
 [Route("api/v1/[controller]")]
 public class CarsController(IMapper mapper, ICarApplicationService carService) : ControllerBase {
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name = Constants.GetCarById)]
     public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken) {
         var model = await carService.GetModelByIdAsync(id, cancellationToken);
 
@@ -21,7 +21,7 @@ public class CarsController(IMapper mapper, ICarApplicationService carService) :
     public async Task<IActionResult> CreateAsync([FromBody] CarRequestModel model, CancellationToken cancellationToken) {
         var createdModel = await carService.CreateModelAsync(mapper.Map<CarCreateModel>(model), cancellationToken);
 
-        return createdModel is not null ? CreatedAtAction(nameof(GetByIdAsync), new { id = createdModel.Id }, mapper.Map<CarResponseModel>(createdModel)) : BadRequest();
+        return createdModel is not null ? CreatedAtRoute(Constants.GetCarById, new { id = createdModel.Id }, mapper.Map<CarResponseModel>(createdModel)) : BadRequest();
     }
 
     [HttpPut("{id}")]

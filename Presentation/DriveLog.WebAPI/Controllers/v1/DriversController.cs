@@ -10,7 +10,7 @@ namespace DriveLog.WebAPI.Controllers.v1;
 [ApiController]
 [Route("api/v1/[controller]")]
 public class DriversController(IMapper mapper, IDriverApplicationService driverService) : ControllerBase {
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name =Constants.GetDriverById)]
     public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken) {
         var model = await driverService.GetModelByIdAsync(id, cancellationToken);
 
@@ -21,7 +21,7 @@ public class DriversController(IMapper mapper, IDriverApplicationService driverS
     public async Task<IActionResult> CreateAsync([FromBody] DriverRequestModel model, CancellationToken cancellationToken) {
         var createdModel = await driverService.CreateModelAsync(mapper.Map<DriverCreateModel>(model), cancellationToken);
 
-        return createdModel is not null ? CreatedAtAction(nameof(GetByIdAsync), new { id = createdModel.Id }, mapper.Map<DriverResponseModel>(createdModel)) : BadRequest();
+        return createdModel is not null ? CreatedAtRoute(Constants.GetDriverById, new { id = createdModel.Id }, mapper.Map<DriverResponseModel>(createdModel)) : BadRequest();
     }
 
     [HttpPut("{id}")]
