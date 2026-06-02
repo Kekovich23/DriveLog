@@ -11,10 +11,10 @@ namespace DriveLog.Application.Services;
 public class CarApplicationService(IUnitOfWork unitOfWork, ICarRepository repository, IMapper mapper)
     : ApplicationService<Car, CarModel, CarCreateModel, Guid, ICarRepository>(unitOfWork, repository, mapper), ICarApplicationService {
     protected override async Task<Car?> CreateAsync(CarCreateModel model, CancellationToken cancellationToken)
-        => await _repository.GetByNumberAsync(model.Number) != null ? null : new Car(Guid.CreateVersion7(), new(model.Number));
+        => await _repository.GetByNumberAsync(new(model.Number)) != null ? null : new Car(Guid.CreateVersion7(), new(model.Number));
 
     protected override async Task<bool> UpdateAsync(Car entity, CarModel model, CancellationToken cancellationToken) {
-        if (await _repository.GetByNumberAsync(model.Number) != null) {
+        if (await _repository.GetByNumberAsync(new(model.Number)) != null) {
             return false;
         }
 

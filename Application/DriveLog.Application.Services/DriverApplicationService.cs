@@ -12,10 +12,10 @@ public class DriverApplicationService(IUnitOfWork unitOfWork, IDriverRepository 
     : ApplicationService<Driver, DriverModel, DriverCreateModel, Guid, IDriverRepository>(unitOfWork, repository, mapper),
     IDriverApplicationService {
     protected override async Task<Driver?> CreateAsync(DriverCreateModel model, CancellationToken cancellationToken)
-        => await _repository.GetByNumberAsync(model.Number) != null ? null : new(Guid.CreateVersion7(), new(model.FirstName, model.LastName), new(model.Number));
+        => await _repository.GetByNumberAsync(new(model.Number)) != null ? null : new(Guid.CreateVersion7(), new(model.FirstName, model.LastName), new(model.Number));
 
     protected override async Task<bool> UpdateAsync(Driver entity, DriverModel model, CancellationToken cancellationToken) {
-        if (await _repository.GetByNumberAsync(model.Number) != null) {
+        if (await _repository.GetByNumberAsync(new(model.Number)) != null) {
             return false;
         }
 

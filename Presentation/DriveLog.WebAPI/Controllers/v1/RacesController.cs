@@ -1,8 +1,10 @@
-﻿using DriveLog.Application.CommandHandler;
+﻿using AutoMapper;
+using DriveLog.Application.CommandHandler;
 using DriveLog.Application.Models;
 using DriveLog.Application.Models.Pagination;
 using DriveLog.Application.Services.Contracts;
 using DriveLog.WebAPI.Models.Requests;
+using DriveLog.WebAPI.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DriveLog.WebAPI.Controllers.v1;
@@ -14,7 +16,8 @@ public class RacesController(CreateRaceCommandHandler createHandler,
                              StartRaceCommandHandler startHandler,
                              RecordLapTimeCommandHandler recordLapHandler,
                              FinishRaceCommandHandler finishHandler,
-                             IRaceQueryService queryService) : ControllerBase {
+                             IRaceQueryService queryService,
+                             IMapper mapper) : ControllerBase {
     [HttpGet]
     public async Task<IActionResult> GetAllAsync([FromQuery] int skip = 0, [FromQuery] int take = 10, CancellationToken cancellationToken = default) {
         var pagination = new PaginationRequest { Skip = skip, Take = take }.Validate();
@@ -27,14 +30,14 @@ public class RacesController(CreateRaceCommandHandler createHandler,
     public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken) {
         var race = await queryService.GetRaceByIdAsync(id, cancellationToken);
 
-        return race is not null ? Ok(race) : NotFound();
+        return race is not null ? Ok(mapper.Map<RaceResponseModel>(race)) : NotFound();
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] RaceRequestModel model, CancellationToken cancellationToken) {
         var race = await createHandler.HandleAsync(new CreateRaceCommand(model.TrackId, model.Date), cancellationToken);
 
-        return CreatedAtRoute("GetRaceById", new { id = race.Id }, race);
+        return CreatedAtRoute("GetRaceById", new { id = race.Id }, mapper.Map<RaceResponseModel>(race));
     }
 
     [HttpPost("{id}/drivers")]
@@ -72,10 +75,10 @@ public class RacesController(CreateRaceCommandHandler createHandler,
         return results is not null ? Ok(results) : NotFound("Race results not found.");
     }
 
-    [HttpGet("{id}/best-laps")]
+    [HttpGet("{id}/best-lap")]
     public async Task<IActionResult> GetBestLapsAsync(Guid id, CancellationToken cancellationToken) {
-        var bestLaps = await queryService.GetBestLapTimeAsync(id, cancellationToken);
+        var bestLap = await queryService.GetBestLapTimeAsync(id, cancellationToken);
 
-        return bestLaps is not null ? Ok(bestLaps) : NotFound("Best laps not found.");
+        return bestLap is not null ? Ok(bestLap) : NotFound("Best lap not found.");
     }
 }
