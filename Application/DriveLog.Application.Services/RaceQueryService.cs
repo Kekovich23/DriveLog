@@ -1,4 +1,5 @@
 ﻿using DriveLog.Application.Models;
+using DriveLog.Application.Models.Race;
 using DriveLog.Application.Services.Contracts;
 using DriveLog.Infrastructure;
 using DriveLog.ValueObjects.Exceptions;
@@ -7,6 +8,17 @@ using Microsoft.EntityFrameworkCore;
 namespace DriveLog.Application.Services;
 
 public class RaceQueryService(DriveLogDbContext context) : IRaceQueryService {
+    public async Task<RaceModel?> GetRaceByIdAsync(Guid raceId, CancellationToken cancellationToken = default) {
+        var race = await context.Races.AsNoTracking().FirstOrDefaultAsync(r => r.Id == raceId, cancellationToken);
+
+        return race == null ? null : new RaceModel(race.Id, race.TrackId, race.Date.Value);
+    }
+
+    public async Task<IReadOnlyList<RaceModel>> GetAllRacesAsync(CancellationToken cancellationToken = default)
+        => (await context.Races.AsNoTracking()
+                               .Select(r => new RaceModel(r.Id, r.TrackId, r.Date.Value))
+                               .ToListAsync(cancellationToken)).AsReadOnly();
+
     public async Task<BestTimeDto?> GetBestLapTimeAsync(Guid raceId, CancellationToken cancellationToken = default) {
         var bestLapData = await context.Races.AsNoTracking()
                           .Where(r => r.Id == raceId)
@@ -21,9 +33,9 @@ public class RaceQueryService(DriveLogDbContext context) : IRaceQueryService {
             return null;
         }
 
-        var driver = await context.Drivers.AsNoTracking().FirstOrDefaultAsync(d => d.Id == bestLapData.DriverId, cancellationToken) 
+        var driver = await context.Drivers.AsNoTracking().FirstOrDefaultAsync(d => d.Id == bestLapData.DriverId, cancellationToken)
             ?? throw new EntityNotFoundException("Driver not found.");
-        var car = await context.Cars.AsNoTracking().FirstOrDefaultAsync(c => c.Id == bestLapData.CarId, cancellationToken) 
+        var car = await context.Cars.AsNoTracking().FirstOrDefaultAsync(c => c.Id == bestLapData.CarId, cancellationToken)
             ?? throw new EntityNotFoundException("Car not found.");
 
         return bestLapData == null

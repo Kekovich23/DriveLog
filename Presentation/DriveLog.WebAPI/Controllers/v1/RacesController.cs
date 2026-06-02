@@ -14,6 +14,17 @@ public class RacesController(CreateRaceCommandHandler createHandler,
                              RecordLapTimeCommandHandler recordLapHandler,
                              FinishRaceCommandHandler finishHandler,
                              IRaceQueryService queryService) : ControllerBase {
+    [HttpGet]
+    public async Task<IActionResult> GetAllAsync(CancellationToken cancellationToken)
+        => Ok(await queryService.GetAllRacesAsync(cancellationToken));
+
+    [HttpGet("{id}", Name = "GetRaceById")]
+    public async Task<IActionResult> GetByIdAsync(Guid id, CancellationToken cancellationToken) {
+        var race = await queryService.GetRaceByIdAsync(id, cancellationToken);
+
+        return race is not null ? Ok(race) : NotFound();
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] RaceRequestModel model, CancellationToken cancellationToken) {
         var race = await createHandler.HandleAsync(new CreateRaceCommand(model.TrackId, model.Date), cancellationToken);
