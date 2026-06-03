@@ -1,0 +1,48 @@
+﻿using DriveLog.Application.CommandHandler;
+using DriveLog.Application.Services;
+using DriveLog.Application.Services.Contracts;
+using DriveLog.Domain.Contracts;
+using DriveLog.Domain.Contracts.Repositories;
+using DriveLog.Infrastructure;
+using DriveLog.Infrastructure.Repositories;
+using DriveLog.WebAPI.Mapping;
+using DriveLog.WebAPI.Validators;
+using FluentValidation;
+using Microsoft.EntityFrameworkCore;
+
+namespace DriveLog.WebAPI.Extensions;
+
+public static class ApplicationExtensions {
+    public static void AddApplicationServices(this WebApplicationBuilder builder) {
+        builder.Services.AddDbContext<DriveLogDbContext>(opt => {
+            opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+            if (builder.Environment.IsDevelopment()) {
+                opt.EnableSensitiveDataLogging();
+                opt.EnableDetailedErrors();
+            }
+        });
+
+        builder.Services.AddScoped<IUnitOfWork>(opt => opt.GetRequiredService<DriveLogDbContext>());
+
+        builder.Services.AddScoped<ICarRepository, CarRepository>();
+        builder.Services.AddScoped<IDriverRepository, DriverRepository>();
+        builder.Services.AddScoped<IRaceRepository, RaceRepository>();
+        builder.Services.AddScoped<ITrackRepository, TrackRepository>();
+
+        builder.Services.AddScoped<ICarApplicationService, CarApplicationService>();
+        builder.Services.AddScoped<IDriverApplicationService, DriverApplicationService>();
+        builder.Services.AddScoped<ITrackApplicationService, TrackApplicationService>();
+        builder.Services.AddScoped<IRaceQueryService, RaceQueryService>();
+
+        builder.Services.AddScoped<FinishRaceCommandHandler>();
+        builder.Services.AddScoped<RecordLapTimeCommandHandler>();
+        builder.Services.AddScoped<RegisterDriverCommandHandler>();
+        builder.Services.AddScoped<StartRaceCommandHandler>();
+        builder.Services.AddScoped<CreateRaceCommandHandler>();
+
+        builder.Services.AddAutoMapper(config => config.AddProfile<ApplicationProfile>());
+
+        builder.Services.AddValidatorsFromAssemblyContaining<DriverRequestModelValidator>();
+    }
+}

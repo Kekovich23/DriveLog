@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/Application/">
+    <Project Path="Application/DriveLog.Application.CommandHandler/DriveLog.Application.CommandHandler.csproj" Id="51bb299e-61cb-42d9-b3b9-755acc2bcaf5" />
+    <Project Path="Application/DriveLog.Application.Models/DriveLog.Application.Models.csproj" />
+    <Project Path="Application/DriveLog.Application.Services/DriveLog.Application.Services.csproj" />
+  </Folder>
+  <Folder Name="/Domain/">
+    <Project Path="Domain/DriveLog.Domain/DriveLog.Domain.csproj" />
+    <Project Path="Domain/DriveLog.ValueObjects/DriveLog.ValueObjects.csproj" />
+  </Folder>
+  <Folder Name="/DomainApp/">
+    <Project Path="DomainApp/DriveLog.Domain.App/DriveLog.Domain.App.csproj" />
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="Infrastructure/DriveLog.Infrastructure/DriveLog.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Presentation/">
+    <Project Path="Presentation/DriveLog.WebAPI.Models/DriveLog.WebAPI.Models.csproj" />
+    <Project Path="Presentation/DriveLog.WebAPI/DriveLog.WebAPI.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+</Solution>
