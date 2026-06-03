@@ -1,5 +1,6 @@
 ﻿using DriveLog.WebAPI;
 using DriveLog.WebAPI.Extensions;
+using DriveLog.WebAPI.Filters;
 
 DotNetEnv.Env.Load();
 
@@ -7,7 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddApplicationServices();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => {
+    options.Filters.Add<ValidationFilter>();
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options => {
     var modelsXmlPath = Path.Combine(AppContext.BaseDirectory, "DriveLog.WebAPI.Models.xml");

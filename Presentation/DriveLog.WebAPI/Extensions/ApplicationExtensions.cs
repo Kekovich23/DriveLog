@@ -6,6 +6,8 @@ using DriveLog.Domain.Contracts.Repositories;
 using DriveLog.Infrastructure;
 using DriveLog.Infrastructure.Repositories;
 using DriveLog.WebAPI.Mapping;
+using DriveLog.WebAPI.Validators;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 namespace DriveLog.WebAPI.Extensions;
@@ -40,5 +42,7 @@ public static class ApplicationExtensions {
         builder.Services.AddScoped<CreateRaceCommandHandler>();
 
         builder.Services.AddAutoMapper(config => config.AddProfile<ApplicationProfile>());
+
+        builder.Services.AddValidatorsFromAssemblyContaining<DriverRequestModelValidator>();
     }
 }
